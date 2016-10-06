@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.XPath;
@@ -1008,21 +1009,12 @@ namespace Chummer.Backend.Equipment
 		/// <summary>
 		/// Whether or not the Mod is allowed to accept Cyberware Modular Plugins.
 		/// </summary>
-		public bool AllowModularPlugins
+		public bool IsModular
 		{
 			get
 			{
-				bool blnReturn = false;
-				foreach (Cyberware objChild in _lstCyberware)
-				{
-					if (objChild.Subsytems.Contains("Modular Plug-In"))
-					{
-						blnReturn = true;
-						break;
-					}
-				}
-
-				return blnReturn;
+				//TODO: I'm not super happy with this implementation, but it's easier than refactoring limbs entirely.
+				return _lstCyberware.Any(objChild => objChild.Name.StartsWith("Modular Component"));
 			}
 		}
 		#endregion

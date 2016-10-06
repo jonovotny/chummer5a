@@ -2042,25 +2042,21 @@ namespace Chummer.Backend.Equipment
 		}
 
 		/// <summary>
-		/// Whether or not the Cyberware is allowed to accept Modular Plugins.
+		/// Whether or not the Cyberware is modular, and capable of being uninstalled.
 		/// </summary>
-		public bool AllowModularPlugins
+		public bool IsModular
 		{
 			get
 			{
-				bool blnReturn = false;
-				foreach (Cyberware objChild in _objChildren)
-				{
-					if (objChild.Subsytems.Contains("Modular Plug-In"))
-					{
-						blnReturn = true;
-						break;
-					}
-				}
-
-				return blnReturn;
+				//TODO: I'm not super happy with this implementation, but it's easier than refactoring limbs entirely.
+				return _objChildren.Any(objChild => objChild.Name.StartsWith("Modular Component"));
 			}
 		}
+
+		/// <summary>
+		/// Whether or not the Cyberware is installed (Typically from Modular Connectors)
+		/// </summary>
+		public bool Installed { get; set; }
 		#endregion
 	}
 }

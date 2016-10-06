@@ -4357,19 +4357,22 @@ namespace Chummer
                 decimal decCyberware = 0m;
                 decimal decBioware = 0m;
                 decimal decHole = 0m;
-                foreach (Cyberware objCyberware in _lstCyberware)
+                foreach (Cyberware objCyberware in _lstCyberware.Where(objCyberware => objCyberware.Installed))
                 {
-                    if (objCyberware.Name == "Essence Hole")
-                        decHole += objCyberware.CalculatedESS;
-                    else
-                    {
-						if (objCyberware.SourceType == Improvement.ImprovementSource.Cyberware)
-							decCyberware += objCyberware.CalculatedESS;
-						else if (objCyberware.SourceType == Improvement.ImprovementSource.Bioware)
-						{
-								decBioware += objCyberware.CalculatedESS;
-						}
-                    }
+	                if (objCyberware.Name == "Essence Hole")
+		                decHole += objCyberware.CalculatedESS;
+	                else
+	                {
+		                switch (objCyberware.SourceType)
+		                {
+			                case Improvement.ImprovementSource.Cyberware:
+				                decCyberware += objCyberware.CalculatedESS;
+				                break;
+			                case Improvement.ImprovementSource.Bioware:
+				                decBioware += objCyberware.CalculatedESS;
+				                break;
+		                }
+	                }
                 }
 				if (_decPrototypeTranshuman > 0)
 				{
@@ -4387,13 +4390,9 @@ namespace Chummer
                 decESS -= decHole;
 
                 // If the character has a fixed Essence Improvement, permanently fix their Essence at its value.
-                foreach (Improvement objImprovement in _lstImprovements)
+                if (_lstImprovements.Any(objImprovement => objImprovement.ImproveType == Improvement.ImprovementType.CyborgEssence && objImprovement.Enabled))
                 {
-                    if (objImprovement.ImproveType == Improvement.ImprovementType.CyborgEssence && objImprovement.Enabled)
-                    {
-                        decESS = 0.1m;
-                        break;
-                    }
+	                decESS = 0.1m;
                 }
 
                 return decESS;

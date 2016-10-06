@@ -33,6 +33,7 @@ using Chummer.Backend;
 using Chummer.Backend.Equipment;
 using Chummer.Skills;
 using System.Drawing.Imaging;
+using System.Windows.Documents;
 
 public delegate void DiceRollerOpenHandler(Object sender);
 public delegate void DiceRollerOpenIntHandler(Chummer.Character objCharacter, int intDice);
@@ -14282,7 +14283,6 @@ namespace Chummer
 			frmPickCyberware.LockGrade();
 			frmPickCyberware.ShowOnlySubsystems = true;
 			frmPickCyberware.Subsystems = objMod.Subsystems;
-			frmPickCyberware.AllowModularPlugins = objMod.AllowModularPlugins;
 			frmPickCyberware.ShowDialog(this);
 
 			if (frmPickCyberware.DialogResult == DialogResult.Cancel)
@@ -21394,12 +21394,11 @@ namespace Chummer
                 lblCyberlimbAGILabel.Visible = false;
                 lblCyberlimbSTR.Visible = false;
                 lblCyberlimbSTRLabel.Visible = false;
+				chkModularCyberwareInstalled.Visible = false;
                 return;
 			}
 				// Locate the selected piece of Cyberware.
-				bool blnFound = false;
-			if (objCyberware != null)
-				blnFound = true;
+				bool blnFound = objCyberware != null;
 
 			if (blnFound)
 			{
@@ -21425,7 +21424,9 @@ namespace Chummer
                     lblCyberlimbSTRLabel.Text = lblSTRLabel.Text + ":";
                     lblCyberlimbAGI.Text = objCyberware.TotalAgility.ToString();
                     lblCyberlimbSTR.Text = objCyberware.TotalStrength.ToString();
-
+		            chkModularCyberwareInstalled.Visible = objCyberware.IsModular;
+	                chkModularCyberwareInstalled.Enabled = chkModularCyberwareInstalled.Visible;
+		            chkModularCyberwareInstalled.Checked = objCyberware.Installed;
 
                 }
                 else
@@ -21434,6 +21435,8 @@ namespace Chummer
                     lblCyberlimbAGILabel.Visible = false;
                     lblCyberlimbSTR.Visible = false;
                     lblCyberlimbSTRLabel.Visible = false;
+					chkModularCyberwareInstalled.Visible = false;
+	                chkModularCyberwareInstalled.Checked = false;
                 }
 
                 if (objCyberware.SourceType == Improvement.ImprovementSource.Cyberware)
@@ -21454,9 +21457,6 @@ namespace Chummer
 					{
 						tabCyberwareCM.Visible = true;
 					}
-
-					if (objCyberware == null)
-						return;
 
 					// Hide any unused CM boxes.
 					_blnSkipRefresh = true;
@@ -22760,8 +22760,6 @@ namespace Chummer
 
 			if (objSource == Improvement.ImprovementSource.Bioware)
 				frmPickCyberware.WindowMode = frmSelectCyberware.Mode.Bioware;
-
-			frmPickCyberware.AllowModularPlugins = objSelectedCyberware.AllowModularPlugins;
 
 			frmPickCyberware.ShowDialog(this);
 
@@ -25078,7 +25076,7 @@ namespace Chummer
                 if (objGrade.Notes != string.Empty)
                     nodGrade.ForeColor = Color.SaddleBrown;
                 nodGrade.ToolTipText = CommonFunctions.WordWrap(objGrade.Notes, 100);
-
+				
                 foreach (Art objArt in _objCharacter.Arts)
                 {
                     if (objArt.Grade == objGrade.Grade)
@@ -27554,6 +27552,74 @@ namespace Chummer
 		private void chkShowFreeNuyen_CheckedChanged(object sender, EventArgs e)
 		{
 			PopulateExpenseList();
+		}
+
+		private void chkModularCyberwareInstalled_CheckedChanged(object sender, EventArgs e)
+		{
+			if (_blnSkipRefresh)
+				return;
+
+			// Locate the selected Cyberware.
+			try
+			{
+					Cyberware objCyberware = _objFunctions.FindCyberware(treCyberware.SelectedNode.Tag.ToString(), _objCharacter.Cyberware);
+					if (objCyberware != null)
+					{
+						_blnSkipRefresh = true;
+						objCyberware.Installed = chkModularCyberwareInstalled.Checked;
+						_blnSkipRefresh = false;
+						if (chkModularCyberwareInstalled.Checked)
+						{
+							// Add the Cyberware's Improvements to the character.
+							if (objCyberware.Bonus != null)
+								_objImprovementManager.CreateImprovements(Improvement.ImprovementSource.Cyberware, objCyberware.InternalId, objCyberware.Bonus, false, 1, objCyberware.DisplayNameShort);
+							// Add the Improvements from any Armor Mods in the Armor.
+							foreach (Cyberware objChildCyberware in objCyberware.Children.Where(objChildCyberware => objChildCyberware.Bonus != null && objChildCyberware.Installed))
+							{
+								_objImprovementManager.CreateImprovements(Improvement.ImprovementSource.Cyberware, objChildCyberware.InternalId, objChildCyberware.Bonus, false, objChildCyberware.Rating, objChildCyberware.DisplayNameShort);
+							}
+							// Add the Improvements from any Gear in the Armor.
+							foreach (Gear objGear in objCyberware.Gear.Where(objGear => objGear.Bonus != null && objGear.Equipped))
+							{
+								_objImprovementManager.CreateImprovements(Improvement.ImprovementSource.Gear, objGear.InternalId, objGear.Bonus, false, objGear.Rating, objGear.DisplayNameShort);
+							}
+							treCyberware.SelectedNode.ForeColor = Color.Black;
+							foreach (TreeNode objChildNode in treCyberware.SelectedNode.Nodes)
+							{
+								objChildNode.ForeColor = Color.Black;
+							}
+						}
+						else
+						{
+							// Remove any Improvements the Armor created.
+							if (objCyberware.Bonus != null)
+								_objImprovementManager.RemoveImprovements(Improvement.ImprovementSource.Cyberware, objCyberware.InternalId);
+							// Remove any Improvements from any Armor Mods in the Armor.
+							foreach (Cyberware objChildCyberware in objCyberware.Children.Where(objChildCyberware => objChildCyberware.Bonus != null))
+							{
+								_objImprovementManager.RemoveImprovements(Improvement.ImprovementSource.Cyberware, objChildCyberware.InternalId);
+							}
+							// Remove any Improvements from any Gear in the Armor.
+							foreach (Gear objGear in objCyberware.Gear.Where(objGear => objGear.Bonus != null))
+							{
+								_objImprovementManager.RemoveImprovements(Improvement.ImprovementSource.Gear, objGear.InternalId);
+						}
+						treCyberware.SelectedNode.ForeColor = Color.Gray;
+						foreach (TreeNode objChildNode in treCyberware.SelectedNode.Nodes)
+						{
+							objChildNode.ForeColor = Color.Gray;
+						}
+					}
+					}
+				RefreshSelectedCyberware();
+				UpdateCharacterInfo();
+
+				_blnIsDirty = true;
+				UpdateWindowTitle();
+			}
+			catch
+			{
+			}
 		}
 	}
 }

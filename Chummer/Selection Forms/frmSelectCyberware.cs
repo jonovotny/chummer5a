@@ -119,8 +119,8 @@ namespace Chummer
 				// Make sure the Category isn't in the exclusion list.
 				bool blnAddItem = true;
 
-				if (objXmlCategory.Attributes["show"] != null)
-					blnAddItem = _blnAllowModularPlugins;
+				//if (objXmlCategory.Attributes["show"] != null)
+					//blnAddItem = _blnAllowModularPlugins;
 
 			    if (_blnShowOnlyLimbs)
 			        blnAddItem = objXmlCategory.InnerText == "Cyberlimb";
@@ -767,17 +767,6 @@ namespace Chummer
 			get
 			{
 				return _intSelectedESSDiscount;
-			}
-		}
-
-		/// <summary>
-		/// Whether or not Modular Plugins are allowed.
-		/// </summary>
-		public bool AllowModularPlugins
-		{
-			set
-			{
-				_blnAllowModularPlugins = value;
 			}
 		}
 

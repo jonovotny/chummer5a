@@ -9802,95 +9802,98 @@ namespace Chummer
             treVehicles.SelectedNode.Text = objVehicle.DisplayName;
         }
 
-        private void tsVehicleAddCyberware_Click(object sender, EventArgs e)
-        {
-            Vehicle objVehicle = new Vehicle(_objCharacter);
-            VehicleMod objMod = _objFunctions.FindVehicleMod(treVehicles.SelectedNode.Tag.ToString(), _objCharacter.Vehicles, out objVehicle);
-
-            if (objMod == null)
-            {
-                MessageBox.Show(LanguageManager.Instance.GetString("Message_VehicleCyberwarePlugin"), LanguageManager.Instance.GetString("MessageTitle_NoCyberware"), MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-
-            if (!objMod.AllowCyberware)
-            {
-                MessageBox.Show(LanguageManager.Instance.GetString("Message_VehicleCyberwarePlugin"), LanguageManager.Instance.GetString("MessageTitle_NoCyberware"), MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-
-            frmSelectCyberware frmPickCyberware = new frmSelectCyberware(_objCharacter);
-            frmPickCyberware.SetGrade = "Standard";
-            frmPickCyberware.LockGrade();
-            frmPickCyberware.ShowOnlySubsystems = true;
-            frmPickCyberware.Subsystems = objMod.Subsystems;
-            frmPickCyberware.AllowModularPlugins = objMod.AllowModularPlugins;
-            frmPickCyberware.ParentVehicle = objVehicle;
-            frmPickCyberware.ShowDialog(this);
-
-            if (frmPickCyberware.DialogResult == DialogResult.Cancel)
-                return;
-
-            // Open the Cyberware XML file and locate the selected piece.
-            XmlDocument objXmlDocument = XmlManager.Instance.Load("cyberware.xml");
-
-            XmlNode objXmlCyberware = objXmlDocument.SelectSingleNode("/chummer/cyberwares/cyberware[name = \"" + frmPickCyberware.SelectedCyberware + "\"]");
-
-            // Create the Cyberware object.
-            Cyberware objCyberware = new Cyberware(_objCharacter);
-            List<Weapon> objWeapons = new List<Weapon>();
-            TreeNode objNode = new TreeNode();
-            List<TreeNode> objWeaponNodes = new List<TreeNode>();
-            objCyberware.Create(objXmlCyberware, _objCharacter, frmPickCyberware.SelectedGrade, Improvement.ImprovementSource.Cyberware, frmPickCyberware.SelectedRating, objNode, objWeapons, objWeaponNodes, false);
-            if (objCyberware.InternalId == Guid.Empty.ToString())
-                return;
-
-            if (frmPickCyberware.FreeCost)
-                objCyberware.Cost = "0";
-
-	        objCyberware.DiscountCost = frmPickCyberware.BlackMarketDiscount;
-            objCyberware.VehicleMounted = true;
-			//TODO: There has to be a better way to do this. Can't currently be handled in the create method because Create doesn't know about parents.
-			if (objCyberware.Category == "Cyberlimb Enhancement")
+		private void tsVehicleAddCyberware_Click(object sender, EventArgs e)
+		{
+			while (true)
 			{
-				switch (objCyberware.Name)
+				Vehicle objVehicle = new Vehicle(_objCharacter);
+				VehicleMod objMod = _objFunctions.FindVehicleMod(treVehicles.SelectedNode.Tag.ToString(), _objCharacter.Vehicles, out objVehicle);
+
+				if (objMod == null)
 				{
-					case "Customized Agility":
-						objCyberware.MinRating = objVehicle.Pilot;
-						objCyberware.MaxRating = objVehicle.Pilot * 2;
-						break;
-					case "Customized Strength":
-						objCyberware.MinRating = objVehicle.TotalBody;
-						objCyberware.MaxRating = objVehicle.TotalBody * 2;
-						break;
+					MessageBox.Show(LanguageManager.Instance.GetString("Message_VehicleCyberwarePlugin"), LanguageManager.Instance.GetString("MessageTitle_NoCyberware"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+					return;
 				}
+
+				if (!objMod.AllowCyberware)
+				{
+					MessageBox.Show(LanguageManager.Instance.GetString("Message_VehicleCyberwarePlugin"), LanguageManager.Instance.GetString("MessageTitle_NoCyberware"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+					return;
+				}
+
+				frmSelectCyberware frmPickCyberware = new frmSelectCyberware(_objCharacter);
+				frmPickCyberware.SetGrade = "Standard";
+				frmPickCyberware.LockGrade();
+				frmPickCyberware.ShowOnlySubsystems = true;
+				frmPickCyberware.Subsystems = objMod.Subsystems;
+				frmPickCyberware.ParentVehicle = objVehicle;
+				frmPickCyberware.ShowDialog(this);
+
+				if (frmPickCyberware.DialogResult == DialogResult.Cancel)
+					return;
+
+				// Open the Cyberware XML file and locate the selected piece.
+				XmlDocument objXmlDocument = XmlManager.Instance.Load("cyberware.xml");
+
+				XmlNode objXmlCyberware = objXmlDocument.SelectSingleNode("/chummer/cyberwares/cyberware[name = \"" + frmPickCyberware.SelectedCyberware + "\"]");
+
+				// Create the Cyberware object.
+				Cyberware objCyberware = new Cyberware(_objCharacter);
+				List<Weapon> objWeapons = new List<Weapon>();
+				TreeNode objNode = new TreeNode();
+				List<TreeNode> objWeaponNodes = new List<TreeNode>();
+				objCyberware.Create(objXmlCyberware, _objCharacter, frmPickCyberware.SelectedGrade, Improvement.ImprovementSource.Cyberware, frmPickCyberware.SelectedRating, objNode, objWeapons, objWeaponNodes, false);
+				if (objCyberware.InternalId == Guid.Empty.ToString())
+					return;
+
+				if (frmPickCyberware.FreeCost)
+					objCyberware.Cost = "0";
+
+				objCyberware.DiscountCost = frmPickCyberware.BlackMarketDiscount;
+				objCyberware.VehicleMounted = true;
+				//TODO: There has to be a better way to do this. Can't currently be handled in the create method because Create doesn't know about parents.
+				if (objCyberware.Category == "Cyberlimb Enhancement")
+				{
+					switch (objCyberware.Name)
+					{
+						case "Customized Agility":
+							objCyberware.MinRating = objVehicle.Pilot;
+							objCyberware.MaxRating = objVehicle.Pilot*2;
+							break;
+						case "Customized Strength":
+							objCyberware.MinRating = objVehicle.TotalBody;
+							objCyberware.MaxRating = objVehicle.TotalBody*2;
+							break;
+					}
+				}
+
+				treVehicles.SelectedNode.Nodes.Add(objNode);
+				treVehicles.SelectedNode.Expand();
+				objMod.Cyberware.Add(objCyberware);
+
+				foreach (Weapon objWeapon in objWeapons)
+				{
+					objWeapon.VehicleMounted = true;
+					objVehicle.Weapons.Add(objWeapon);
+				}
+
+				// Create the Weapon Node if one exists.
+				foreach (TreeNode objWeaponNode in objWeaponNodes)
+				{
+					objWeaponNode.ContextMenuStrip = cmsVehicleWeapon;
+					treVehicles.SelectedNode.Parent.Nodes.Add(objWeaponNode);
+					treVehicles.SelectedNode.Parent.Expand();
+				}
+
+				UpdateCharacterInfo();
+
+				if (frmPickCyberware.AddAgain)
+					continue;
+				break;
 			}
+		}
 
-			treVehicles.SelectedNode.Nodes.Add(objNode);
-            treVehicles.SelectedNode.Expand();
-            objMod.Cyberware.Add(objCyberware);
-
-            foreach (Weapon objWeapon in objWeapons)
-            {
-                objWeapon.VehicleMounted = true;
-                objVehicle.Weapons.Add(objWeapon);
-            }
-
-            // Create the Weapon Node if one exists.
-            foreach (TreeNode objWeaponNode in objWeaponNodes)
-            {
-                objWeaponNode.ContextMenuStrip = cmsVehicleWeapon;
-                treVehicles.SelectedNode.Parent.Nodes.Add(objWeaponNode);
-                treVehicles.SelectedNode.Parent.Expand();
-            }
-
-            UpdateCharacterInfo();
-
-            if (frmPickCyberware.AddAgain)
-                tsVehicleAddCyberware_Click(sender, e);
-        }
-
-        private void tsArmorName_Click(object sender, EventArgs e)
+		private void tsArmorName_Click(object sender, EventArgs e)
         {
             // Make sure a parent item is selected, then open the Select Accessory window.
             try
@@ -10049,16 +10052,9 @@ namespace Chummer
         {
             // Count the number of Spells the character currently has and make sure they do not try to select more Spells than they are allowed.
             // The maximum number of Spells a character can start with is 2 x (highest of Spellcasting or Ritual Spellcasting Skill).
-            int intSpellCount = 0;
-            foreach (TreeNode nodCategory in treSpells.Nodes)
-            {
-                foreach (TreeNode nodSpell in nodCategory.Nodes)
-                {
-                    intSpellCount++;
-                }
-            }
+            int intSpellCount = treSpells.Nodes.Cast<TreeNode>().SelectMany(nodCategory => nodCategory.Nodes.Cast<TreeNode>()).Count();
 
-            // Run through the list of Active Skills and pick out the two applicable ones.
+	        // Run through the list of Active Skills and pick out the two applicable ones.
             int intSkillValue = _objCharacter.SkillsSection.Skills.Where(x => x.Name == "Spellcasting" || x.Name == "Ritual Spellcasting").Max(x => x.Rating);
             
             if (intSpellCount >= ((2 * intSkillValue) + _objImprovementManager.ValueOf(Improvement.ImprovementType.SpellLimit)) && !_objCharacter.IgnoreRules)
@@ -16850,9 +16846,7 @@ namespace Chummer
 
             if (objSource == Improvement.ImprovementSource.Bioware)
                 frmPickCyberware.WindowMode = frmSelectCyberware.Mode.Bioware;
-
-            frmPickCyberware.AllowModularPlugins = objSelectedCyberware.AllowModularPlugins;
-
+			
             frmPickCyberware.ShowDialog(this);
 
             // Make sure the dialogue window was not canceled.
