@@ -274,6 +274,75 @@ namespace Chummer
 			lblAstral.Text = _objCharacter.LimitAstral.ToString();
 		}
 
+		/// <summary>
+		/// Toggle the improvements for a selected modular cyberlimb and toggle all other limbs connected to the same connector. 
+		/// </summary>
+		protected void RefreshModularCyberware(Cyberware objCyberware, TreeNodeCollection treCyberware,bool _blnEnable)
+		{
+			foreach (TreeNode objNode in treCyberware)
+			{
+				bool blnEnable = true;
+				Cyberware objCurrentCyberware = _objFunctions.FindCyberware(objNode.Tag.ToString(),
+					_objCharacter.Cyberware);
+				//If this is the Cyberware object that was passed to the method, use _blnEnable. Otherwise, use the opposite of _blnEnable.
+				blnEnable = objCurrentCyberware == objCyberware ? _blnEnable : !_blnEnable;
+				objCyberware.Installed = blnEnable;
+				// Add the Cyberware's Improvements to the character.
+				if (objCyberware.Bonus != null)
+					foreach (
+						Improvement objImprovement in
+							_objCharacter.Improvements.Where(
+								objImprovement => objImprovement.ImproveSource == Improvement.ImprovementSource.Cyberware &&
+								                  objImprovement.SourceName == objCyberware.InternalId))
+					{
+						objImprovement.Enabled = blnEnable;
+					}
+				// Add the Improvements from any Armor Mods in the Armor.
+				foreach (
+					Cyberware objChildCyberware in
+						objCyberware.Children.Where(objChildCyberware => objChildCyberware.Bonus != null && objChildCyberware.Installed))
+				{
+					foreach (
+						Improvement objImprovement in
+							_objCharacter.Improvements.Where(
+								objImprovement => objImprovement.ImproveSource == Improvement.ImprovementSource.Cyberware &&
+								                  objImprovement.SourceName == objChildCyberware.InternalId))
+					{
+						objImprovement.Enabled = blnEnable;
+					}
+				}
+				// Add the Improvements from any Gear in the Armor.
+				foreach (Gear objGear in objCyberware.Gear.Where(objGear => objGear.Bonus != null && objGear.Equipped))
+				{
+					foreach (
+						Improvement objImprovement in
+							_objCharacter.Improvements.Where(
+								objImprovement => objImprovement.ImproveSource == Improvement.ImprovementSource.Gear &&
+								                  objImprovement.SourceName == objGear.InternalId))
+					{
+						objImprovement.Enabled = blnEnable;
+					}
+				}
+				if (blnEnable)
+				{
+					objNode.ForeColor = Color.Black;
+					foreach (TreeNode objChildNode in objNode.Nodes)
+					{
+						objChildNode.ForeColor = Color.Black;
+					}
+				}
+				else
+				{
+
+					objNode.ForeColor = Color.Gray;
+					foreach (TreeNode objChildNode in objNode.Nodes)
+					{
+						objChildNode.ForeColor = Color.Gray;
+					}
+				}
+			}
+		}
+
 		private Lazy<Skill> _gunneryCached;
 
 		protected int MountedGunManualOperationDicePool(Weapon weapon)

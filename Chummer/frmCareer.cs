@@ -21487,7 +21487,7 @@ namespace Chummer
 
 				lblCyberwareAvail.Text = objCyberware.TotalAvail;
 				lblCyberwareCost.Text = String.Format("{0:###,###,##0¥}", objCyberware.TotalCost);
-				lblCyberwareCapacity.Text = objCyberware.CalculatedCapacity + " (" + objCyberware.CapacityRemaining.ToString() + " " + LanguageManager.Instance.GetString("String_Remaining") + ")";
+				lblCyberwareCapacity.Text = string.Format("{0} ({1} {2})", objCyberware.CalculatedCapacity, objCyberware.CapacityRemaining.ToString(), LanguageManager.Instance.GetString("String_Remaining"));
 				lblCyberwareEssence.Text = objCyberware.CalculatedESS.ToString();
 				UpdateCharacterInfo();
 			}
@@ -27562,55 +27562,13 @@ namespace Chummer
 			// Locate the selected Cyberware.
 			try
 			{
-					Cyberware objCyberware = _objFunctions.FindCyberware(treCyberware.SelectedNode.Tag.ToString(), _objCharacter.Cyberware);
-					if (objCyberware != null)
-					{
-						_blnSkipRefresh = true;
-						objCyberware.Installed = chkModularCyberwareInstalled.Checked;
-						_blnSkipRefresh = false;
-						if (chkModularCyberwareInstalled.Checked)
-						{
-							// Add the Cyberware's Improvements to the character.
-							if (objCyberware.Bonus != null)
-								_objImprovementManager.CreateImprovements(Improvement.ImprovementSource.Cyberware, objCyberware.InternalId, objCyberware.Bonus, false, 1, objCyberware.DisplayNameShort);
-							// Add the Improvements from any Armor Mods in the Armor.
-							foreach (Cyberware objChildCyberware in objCyberware.Children.Where(objChildCyberware => objChildCyberware.Bonus != null && objChildCyberware.Installed))
-							{
-								_objImprovementManager.CreateImprovements(Improvement.ImprovementSource.Cyberware, objChildCyberware.InternalId, objChildCyberware.Bonus, false, objChildCyberware.Rating, objChildCyberware.DisplayNameShort);
-							}
-							// Add the Improvements from any Gear in the Armor.
-							foreach (Gear objGear in objCyberware.Gear.Where(objGear => objGear.Bonus != null && objGear.Equipped))
-							{
-								_objImprovementManager.CreateImprovements(Improvement.ImprovementSource.Gear, objGear.InternalId, objGear.Bonus, false, objGear.Rating, objGear.DisplayNameShort);
-							}
-							treCyberware.SelectedNode.ForeColor = Color.Black;
-							foreach (TreeNode objChildNode in treCyberware.SelectedNode.Nodes)
-							{
-								objChildNode.ForeColor = Color.Black;
-							}
-						}
-						else
-						{
-							// Remove any Improvements the Armor created.
-							if (objCyberware.Bonus != null)
-								_objImprovementManager.RemoveImprovements(Improvement.ImprovementSource.Cyberware, objCyberware.InternalId);
-							// Remove any Improvements from any Armor Mods in the Armor.
-							foreach (Cyberware objChildCyberware in objCyberware.Children.Where(objChildCyberware => objChildCyberware.Bonus != null))
-							{
-								_objImprovementManager.RemoveImprovements(Improvement.ImprovementSource.Cyberware, objChildCyberware.InternalId);
-							}
-							// Remove any Improvements from any Gear in the Armor.
-							foreach (Gear objGear in objCyberware.Gear.Where(objGear => objGear.Bonus != null))
-							{
-								_objImprovementManager.RemoveImprovements(Improvement.ImprovementSource.Gear, objGear.InternalId);
-						}
-						treCyberware.SelectedNode.ForeColor = Color.Gray;
-						foreach (TreeNode objChildNode in treCyberware.SelectedNode.Nodes)
-						{
-							objChildNode.ForeColor = Color.Gray;
-						}
-					}
-					}
+				Cyberware objCyberware = _objFunctions.FindCyberware(treCyberware.SelectedNode.Tag.ToString(), _objCharacter.Cyberware);
+				if (objCyberware != null)
+				{
+					_blnSkipRefresh = true;
+					RefreshModularCyberware(objCyberware,treCyberware.SelectedNode.Parent.Nodes,chkModularCyberwareInstalled.Checked);
+					_blnSkipRefresh = false;
+				}
 				RefreshSelectedCyberware();
 				UpdateCharacterInfo();
 

@@ -1374,17 +1374,19 @@ namespace Chummer.Backend.Equipment
 					try
 					{
 						if (_strCapacity == "[*]")
-							strReturn = "*";
+						{
+							return _strCapacity;
+						}
+						if (_strCapacity.StartsWith("FixedValues"))
+						{
+							string[] strValues = _strCapacity.Replace("FixedValues(", string.Empty).Replace(")", string.Empty).Split(',');
+							strReturn = strValues[Convert.ToInt32(_intRating) - 1];
+						}
 						else
 						{
-							if (_strCapacity.StartsWith("FixedValues"))
-							{
-								string[] strValues = _strCapacity.Replace("FixedValues(", string.Empty).Replace(")", string.Empty).Split(',');
-								strReturn = strValues[Convert.ToInt32(_intRating) - 1];
-							}
-							else
-								strReturn = nav.Evaluate(xprCapacity).ToString();
+							strReturn = nav.Evaluate(xprCapacity).ToString();
 						}
+
 						if (blnSquareBrackets)
 							strReturn = "[" + strCapacity + "]";
 					}
