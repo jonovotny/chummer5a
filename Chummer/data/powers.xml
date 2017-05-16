@@ -147,8 +147,9 @@
           <applytorating>yes</applytorating>
 					<skillcategories>
 						<category>Combat Active</category>
-						<category>Technical Active</category>
+            <category>Physical Active</category>
 						<category>Social Active</category>
+            <category>Technical Active</category>
 						<category>Vehicle Active</category>
 					</skillcategories>
         </selectskill>
@@ -378,6 +379,9 @@
       <name>Spell Resistance</name>
       <points>.5</points>
       <adeptway>.25</adeptway>
+      <bonus>
+        <spellresistance>Rating</spellresistance>
+      </bonus>
       <levels>yes</levels>
       <limit>1</limit>
       <source>SR5</source>

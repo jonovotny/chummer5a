@@ -70,11 +70,6 @@ namespace Chummer
 			this.pgbProgress = new System.Windows.Forms.ToolStripProgressBar();
 			this.dlgSaveFile = new System.Windows.Forms.SaveFileDialog();
 			this.tipTooltip = new TheArtOfDev.HtmlRenderer.WinForms.HtmlToolTip();
-			this.lblSignalLabel = new System.Windows.Forms.Label();
-			this.lblResponseLabel = new System.Windows.Forms.Label();
-			this.lblFirewallLabel = new System.Windows.Forms.Label();
-			this.lblSystemLabel = new System.Windows.Forms.Label();
-			this.lblRatingLabel = new System.Windows.Forms.Label();
 			this.lblAttributesAug = new System.Windows.Forms.Label();
 			this.lblAttributesBase = new System.Windows.Forms.Label();
 			this.lblAttributesMetatype = new System.Windows.Forms.Label();
@@ -312,11 +307,6 @@ namespace Chummer
 			this.lblAlias = new System.Windows.Forms.Label();
 			this.lblMetatypeSource = new System.Windows.Forms.Label();
 			this.lblMetatypeSourceLabel = new System.Windows.Forms.Label();
-			this.nudSignal = new System.Windows.Forms.NumericUpDown();
-			this.nudResponse = new System.Windows.Forms.NumericUpDown();
-			this.lblFirewall = new System.Windows.Forms.Label();
-			this.lblSystem = new System.Windows.Forms.Label();
-			this.lblRating = new System.Windows.Forms.Label();
 			this.lblQualityBP = new System.Windows.Forms.Label();
 			this.lblQualityBPLabel = new System.Windows.Forms.Label();
 			this.lblQualitySource = new System.Windows.Forms.Label();
@@ -807,7 +797,7 @@ namespace Chummer
 			this.treVehicles = new Chummer.helpers.TreeView();
 			this.cmdAddVehicle = new SplitButton();
 			this.tabCharacterInfo = new System.Windows.Forms.TabPage();
-			this.cboHandedness = new Chummer.helpers.ComboBox();
+			this.cboPrimaryArm = new Chummer.helpers.ComboBox();
 			this.lblHandedness = new System.Windows.Forms.Label();
 			this.chkIsMainMugshot = new System.Windows.Forms.CheckBox();
 			this.lblNumMugshots = new System.Windows.Forms.Label();
@@ -993,8 +983,6 @@ namespace Chummer
 			this.tabPeople.SuspendLayout();
 			this.tabContacts.SuspendLayout();
 			this.tabEnemies.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.nudSignal)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.nudResponse)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.nudMysticAdeptMAGMagician)).BeginInit();
 			this.panAttributes.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.nudKDEP)).BeginInit();
@@ -1164,66 +1152,6 @@ namespace Chummer
 			this.tipTooltip.TooltipCssClass = "htmltooltip";
 			this.tipTooltip.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
 			this.tipTooltip.ToolTipTitle = "Chummer Help";
-			// 
-			// lblSignalLabel
-			// 
-			this.lblSignalLabel.AutoSize = true;
-			this.lblSignalLabel.Location = new System.Drawing.Point(650, 211);
-			this.lblSignalLabel.Name = "lblSignalLabel";
-			this.lblSignalLabel.Size = new System.Drawing.Size(36, 13);
-			this.lblSignalLabel.TabIndex = 74;
-			this.lblSignalLabel.Tag = "String_Signal";
-			this.lblSignalLabel.Text = "Signal";
-			this.tipTooltip.SetToolTip(this.lblSignalLabel, "Signal of the Node the A.I. currently resides on.");
-			this.lblSignalLabel.Visible = false;
-			// 
-			// lblResponseLabel
-			// 
-			this.lblResponseLabel.AutoSize = true;
-			this.lblResponseLabel.Location = new System.Drawing.Point(650, 185);
-			this.lblResponseLabel.Name = "lblResponseLabel";
-			this.lblResponseLabel.Size = new System.Drawing.Size(55, 13);
-			this.lblResponseLabel.TabIndex = 72;
-			this.lblResponseLabel.Tag = "String_Response";
-			this.lblResponseLabel.Text = "Response";
-			this.tipTooltip.SetToolTip(this.lblResponseLabel, "Response of the Node the A.I. currently resides on.");
-			this.lblResponseLabel.Visible = false;
-			// 
-			// lblFirewallLabel
-			// 
-			this.lblFirewallLabel.AutoSize = true;
-			this.lblFirewallLabel.Location = new System.Drawing.Point(650, 159);
-			this.lblFirewallLabel.Name = "lblFirewallLabel";
-			this.lblFirewallLabel.Size = new System.Drawing.Size(42, 13);
-			this.lblFirewallLabel.TabIndex = 70;
-			this.lblFirewallLabel.Tag = "String_Firewall";
-			this.lblFirewallLabel.Text = "Firewall";
-			this.tipTooltip.SetToolTip(this.lblFirewallLabel, "An A.I.\'s Firewall is the average of their CHA and WIL Attributes.");
-			this.lblFirewallLabel.Visible = false;
-			// 
-			// lblSystemLabel
-			// 
-			this.lblSystemLabel.AutoSize = true;
-			this.lblSystemLabel.Location = new System.Drawing.Point(650, 133);
-			this.lblSystemLabel.Name = "lblSystemLabel";
-			this.lblSystemLabel.Size = new System.Drawing.Size(41, 13);
-			this.lblSystemLabel.TabIndex = 68;
-			this.lblSystemLabel.Tag = "String_System";
-			this.lblSystemLabel.Text = "System";
-			this.tipTooltip.SetToolTip(this.lblSystemLabel, "An A.I.\'s System is the average of their INT and LOG Attributes.");
-			this.lblSystemLabel.Visible = false;
-			// 
-			// lblRatingLabel
-			// 
-			this.lblRatingLabel.AutoSize = true;
-			this.lblRatingLabel.Location = new System.Drawing.Point(650, 107);
-			this.lblRatingLabel.Name = "lblRatingLabel";
-			this.lblRatingLabel.Size = new System.Drawing.Size(38, 13);
-			this.lblRatingLabel.TabIndex = 44;
-			this.lblRatingLabel.Tag = "String_Rating";
-			this.lblRatingLabel.Text = "Rating";
-			this.tipTooltip.SetToolTip(this.lblRatingLabel, "An A.I.\'s Rating is the average of their CHA, INT, LOG, and WIL Attributes.");
-			this.lblRatingLabel.Visible = false;
 			// 
 			// lblAttributesAug
 			// 
@@ -2781,26 +2709,6 @@ namespace Chummer
 			this.mnuSpecialChangeMetatype.Text = "Change &Metatype";
 			this.mnuSpecialChangeMetatype.Click += new System.EventHandler(this.mnuSpecialChangeMetatype_Click);
 			// 
-			// mnuSpecialMutantCritter
-			// 
-			this.mnuSpecialMutantCritter.Image = global::Chummer.Properties.Resources.emoticon_surprised;
-			this.mnuSpecialMutantCritter.Name = "mnuSpecialMutantCritter";
-			this.mnuSpecialMutantCritter.Size = new System.Drawing.Size(213, 22);
-			this.mnuSpecialMutantCritter.Tag = "Menu_SpecialConvertToMutantCritter";
-			this.mnuSpecialMutantCritter.Text = "Convert to Mutant Critter";
-			this.mnuSpecialMutantCritter.Visible = false;
-			this.mnuSpecialMutantCritter.Click += new System.EventHandler(this.mnuSpecialMutantCritter_Click);
-			// 
-			// mnuSpecialToxicCritter
-			// 
-			this.mnuSpecialToxicCritter.Image = global::Chummer.Properties.Resources.emoticon_tongue;
-			this.mnuSpecialToxicCritter.Name = "mnuSpecialToxicCritter";
-			this.mnuSpecialToxicCritter.Size = new System.Drawing.Size(213, 22);
-			this.mnuSpecialToxicCritter.Tag = "Menu_SpecialConvertToToxicCritter";
-			this.mnuSpecialToxicCritter.Text = "Convert to Toxic Critter";
-			this.mnuSpecialToxicCritter.Visible = false;
-			this.mnuSpecialToxicCritter.Click += new System.EventHandler(this.mnuSpecialToxicCritter_Click);
-			// 
 			// mnuSpecialCyberzombie
 			// 
 			this.mnuSpecialCyberzombie.Image = global::Chummer.Properties.Resources.emoticon_evilgrin;
@@ -3454,16 +3362,6 @@ namespace Chummer
 			this.tabCommon.Controls.Add(this.lblAlias);
 			this.tabCommon.Controls.Add(this.lblMetatypeSource);
 			this.tabCommon.Controls.Add(this.lblMetatypeSourceLabel);
-			this.tabCommon.Controls.Add(this.nudSignal);
-			this.tabCommon.Controls.Add(this.nudResponse);
-			this.tabCommon.Controls.Add(this.lblSignalLabel);
-			this.tabCommon.Controls.Add(this.lblResponseLabel);
-			this.tabCommon.Controls.Add(this.lblFirewallLabel);
-			this.tabCommon.Controls.Add(this.lblFirewall);
-			this.tabCommon.Controls.Add(this.lblSystemLabel);
-			this.tabCommon.Controls.Add(this.lblSystem);
-			this.tabCommon.Controls.Add(this.lblRatingLabel);
-			this.tabCommon.Controls.Add(this.lblRating);
 			this.tabCommon.Controls.Add(this.lblQualityBP);
 			this.tabCommon.Controls.Add(this.lblQualityBPLabel);
 			this.tabCommon.Controls.Add(this.lblQualitySource);
@@ -3715,86 +3613,6 @@ namespace Chummer
 			this.lblMetatypeSourceLabel.TabIndex = 88;
 			this.lblMetatypeSourceLabel.Tag = "Label_Source";
 			this.lblMetatypeSourceLabel.Text = "Source:";
-			// 
-			// nudSignal
-			// 
-			this.nudSignal.Enabled = false;
-			this.nudSignal.Location = new System.Drawing.Point(734, 209);
-			this.nudSignal.Maximum = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-			this.nudSignal.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-			this.nudSignal.Name = "nudSignal";
-			this.nudSignal.Size = new System.Drawing.Size(40, 20);
-			this.nudSignal.TabIndex = 75;
-			this.nudSignal.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-			this.nudSignal.Visible = false;
-			this.nudSignal.ValueChanged += new System.EventHandler(this.nudSignal_ValueChanged);
-			// 
-			// nudResponse
-			// 
-			this.nudResponse.Enabled = false;
-			this.nudResponse.Location = new System.Drawing.Point(734, 183);
-			this.nudResponse.Maximum = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-			this.nudResponse.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-			this.nudResponse.Name = "nudResponse";
-			this.nudResponse.Size = new System.Drawing.Size(40, 20);
-			this.nudResponse.TabIndex = 44;
-			this.nudResponse.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-			this.nudResponse.Visible = false;
-			this.nudResponse.ValueChanged += new System.EventHandler(this.nudResponse_ValueChanged);
-			// 
-			// lblFirewall
-			// 
-			this.lblFirewall.AutoSize = true;
-			this.lblFirewall.Location = new System.Drawing.Point(733, 159);
-			this.lblFirewall.Name = "lblFirewall";
-			this.lblFirewall.Size = new System.Drawing.Size(19, 13);
-			this.lblFirewall.TabIndex = 71;
-			this.lblFirewall.Text = "[0]";
-			this.lblFirewall.Visible = false;
-			// 
-			// lblSystem
-			// 
-			this.lblSystem.AutoSize = true;
-			this.lblSystem.Location = new System.Drawing.Point(733, 133);
-			this.lblSystem.Name = "lblSystem";
-			this.lblSystem.Size = new System.Drawing.Size(19, 13);
-			this.lblSystem.TabIndex = 69;
-			this.lblSystem.Text = "[0]";
-			this.lblSystem.Visible = false;
-			// 
-			// lblRating
-			// 
-			this.lblRating.AutoSize = true;
-			this.lblRating.Location = new System.Drawing.Point(733, 107);
-			this.lblRating.Name = "lblRating";
-			this.lblRating.Size = new System.Drawing.Size(19, 13);
-			this.lblRating.TabIndex = 45;
-			this.lblRating.Text = "[0]";
-			this.lblRating.Visible = false;
 			// 
 			// lblQualityBP
 			// 
@@ -4628,7 +4446,7 @@ namespace Chummer
 			this.tabSkillUc.ObjCharacter = null;
 			this.tabSkillUc.Size = new System.Drawing.Size(838, 611);
 			this.tabSkillUc.TabIndex = 0;
-			this.tabSkillUc.Tag = "";
+			this.tabSkillUc.Tag = string.Empty;
 			// 
 			// tabLimits
 			// 
@@ -6277,7 +6095,7 @@ namespace Chummer
 			this.lblCyberlimbSTRLabel.Name = "lblCyberlimbSTRLabel";
 			this.lblCyberlimbSTRLabel.Size = new System.Drawing.Size(81, 13);
 			this.lblCyberlimbSTRLabel.TabIndex = 223;
-			this.lblCyberlimbSTRLabel.Tag = "";
+			this.lblCyberlimbSTRLabel.Tag = string.Empty;
 			this.lblCyberlimbSTRLabel.Text = "Strength (STR):";
 			this.lblCyberlimbSTRLabel.Visible = false;
 			// 
@@ -6288,7 +6106,7 @@ namespace Chummer
 			this.lblCyberlimbAGILabel.Name = "lblCyberlimbAGILabel";
 			this.lblCyberlimbAGILabel.Size = new System.Drawing.Size(64, 13);
 			this.lblCyberlimbAGILabel.TabIndex = 222;
-			this.lblCyberlimbAGILabel.Tag = "";
+			this.lblCyberlimbAGILabel.Tag = string.Empty;
 			this.lblCyberlimbAGILabel.Text = "Agility (AGI):";
 			this.lblCyberlimbAGILabel.Visible = false;
 			// 
@@ -9467,7 +9285,7 @@ namespace Chummer
 			// tabCharacterInfo
 			// 
 			this.tabCharacterInfo.BackColor = System.Drawing.SystemColors.ButtonFace;
-			this.tabCharacterInfo.Controls.Add(this.cboHandedness);
+			this.tabCharacterInfo.Controls.Add(this.cboPrimaryArm);
 			this.tabCharacterInfo.Controls.Add(this.lblHandedness);
 			this.tabCharacterInfo.Controls.Add(this.chkIsMainMugshot);
 			this.tabCharacterInfo.Controls.Add(this.lblNumMugshots);
@@ -9518,15 +9336,15 @@ namespace Chummer
 			this.tabCharacterInfo.Tag = "Tab_CharacterInfo";
 			this.tabCharacterInfo.Text = "Character Info";
 			// 
-			// cboHandedness
+			// cboPrimaryArm
 			// 
-			this.cboHandedness.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cboHandedness.FormattingEnabled = true;
-			this.cboHandedness.Location = new System.Drawing.Point(730, 61);
-			this.cboHandedness.Name = "cboHandedness";
-			this.cboHandedness.Size = new System.Drawing.Size(100, 21);
-			this.cboHandedness.TabIndex = 93;
-			this.cboHandedness.SelectedIndexChanged += new System.EventHandler(this.cboHandedness_SelectedIndexChanged);
+			this.cboPrimaryArm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cboPrimaryArm.FormattingEnabled = true;
+			this.cboPrimaryArm.Location = new System.Drawing.Point(730, 61);
+			this.cboPrimaryArm.Name = "cboPrimaryArm";
+			this.cboPrimaryArm.Size = new System.Drawing.Size(100, 21);
+			this.cboPrimaryArm.TabIndex = 93;
+			this.cboPrimaryArm.SelectedIndexChanged += new System.EventHandler(this.cboPrimaryArm_SelectedIndexChanged);
 			// 
 			// lblHandedness
 			// 
@@ -11046,8 +10864,6 @@ namespace Chummer
 			this.tabContacts.PerformLayout();
 			this.tabEnemies.ResumeLayout(false);
 			this.tabEnemies.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.nudSignal)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.nudResponse)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.nudMysticAdeptMAGMagician)).EndInit();
 			this.panAttributes.ResumeLayout(false);
 			this.panAttributes.PerformLayout();
@@ -11546,16 +11362,6 @@ namespace Chummer
         private System.Windows.Forms.Label lblCritterPowerPointsLabel;
         private System.Windows.Forms.Label lblCritterPowerPointCost;
         private System.Windows.Forms.Label lblCritterPowerPointCostLabel;
-        internal System.Windows.Forms.NumericUpDown nudSignal;
-        internal System.Windows.Forms.NumericUpDown nudResponse;
-        private System.Windows.Forms.Label lblSignalLabel;
-        private System.Windows.Forms.Label lblResponseLabel;
-        private System.Windows.Forms.Label lblFirewallLabel;
-        private System.Windows.Forms.Label lblFirewall;
-        private System.Windows.Forms.Label lblSystemLabel;
-        private System.Windows.Forms.Label lblSystem;
-        private System.Windows.Forms.Label lblRatingLabel;
-        private System.Windows.Forms.Label lblRating;
         private System.Windows.Forms.ToolStripMenuItem mnuSpecialChangeMetatype;
         private System.Windows.Forms.ToolStripMenuItem mnuSpecialCreatePACKSKit;
         private System.Windows.Forms.Label lblMemory;
@@ -12034,7 +11840,7 @@ namespace Chummer
         private System.Windows.Forms.ToolStripMenuItem tsAddAdvancedProgramOption;
         private System.Windows.Forms.ToolStripMenuItem tsAIProgramNotes;
 		private System.Windows.Forms.Label lblHandedness;
-		private ComboBox cboHandedness;
+		private ComboBox cboPrimaryArm;
         private System.Windows.Forms.CheckBox chkIsMainMugshot;
         private System.Windows.Forms.Label lblNumMugshots;
         private System.Windows.Forms.NumericUpDown nudMugshotIndex;

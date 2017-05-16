@@ -38,7 +38,7 @@ namespace Chummer.UI.Skills
 		private Character _character;
 		private List<Tuple<string, Predicate<Skill>>> _dropDownList;
 		private List<Tuple<string, IComparer<Skill>>>  _sortList;
-		private List<SkillControl2> controls = new List<SkillControl2>();
+		private readonly List<SkillControl2> _controls = new List<SkillControl2>();
 		private bool _searchMode;
 		private List<Tuple<string, Predicate<KnowledgeSkill>>> _dropDownKnowledgeList;
 		private List<Tuple<string, IComparer<KnowledgeSkill>>> _sortKnowledgeList;
@@ -100,8 +100,13 @@ namespace Chummer.UI.Skills
 			_sortKnowledgeList = GenerateKnowledgeSortList();
 
 			parts.TaskEnd("GenerateSortList()");
-			
-			cboDisplayFilter.DataSource = _dropDownList;
+
+            cboDisplayFilter.BeginUpdate();
+            cboDisplayFilterKnowledge.BeginUpdate();
+            cboSort.BeginUpdate();
+            cboSortKnowledge.BeginUpdate();
+
+            cboDisplayFilter.DataSource = _dropDownList;
 			cboDisplayFilter.ValueMember = "Item2";
 			cboDisplayFilter.DisplayMember = "Item1";
 			cboDisplayFilter.SelectedIndex = 0;
@@ -126,7 +131,12 @@ namespace Chummer.UI.Skills
 			cboSortKnowledge.SelectedIndex = 0;
 			cboSortKnowledge.MaxDropDownItems = _sortKnowledgeList.Count;
 
-			parts.TaskEnd("_sort databind");
+            cboDisplayFilter.EndUpdate();
+            cboDisplayFilterKnowledge.EndUpdate();
+            cboSort.EndUpdate();
+            cboSortKnowledge.EndUpdate();
+
+            parts.TaskEnd("_sort databind");
 
 			_skills.ChildPropertyChanged += ChildPropertyChanged;
 			_groups.ChildPropertyChanged += ChildPropertyChanged;
@@ -190,20 +200,18 @@ namespace Chummer.UI.Skills
 				new Tuple<string, IComparer<Skill>>(LanguageManager.Instance.GetString("Skill_SortAttributeValue"),
 					new SkillSorter((x, y) => y.AttributeModifiers.CompareTo(x.AttributeModifiers))),
 				new Tuple<string, IComparer<Skill>>(LanguageManager.Instance.GetString("Skill_SortAttributeName"),
-					new SkillSorter((x, y) => x.Attribute.CompareTo(y.Attribute))),
+					new SkillSorter((x, y) => string.Compare(x.Attribute, y.Attribute, StringComparison.Ordinal))),
 				new Tuple<string, IComparer<Skill>>(LanguageManager.Instance.GetString("Skill_SortGroupName"),
-					new SkillSorter((x, y) => y.SkillGroup.CompareTo(x.SkillGroup))),
+					new SkillSorter((x, y) => string.Compare(y.SkillGroup, x.SkillGroup, StringComparison.Ordinal))),
 				new Tuple<string, IComparer<Skill>>(LanguageManager.Instance.GetString("Skill_SortGroupRating"),
 					new SkillSortBySkillGroup()),
 				new Tuple<string, IComparer<Skill>>(LanguageManager.Instance.GetString("Skill_SortCategory"),
-					new SkillSorter((x, y) => x.SkillCategory.CompareTo(y.SkillCategory))),
+					new SkillSorter((x, y) => string.Compare(x.SkillCategory, y.SkillCategory, StringComparison.Ordinal))),
 			};
-
-
 
 			return ret;
 		}
-		
+
 		private List<Tuple<string, Predicate<Skill>>> GenerateDropdownFilter()
 		{
 			List<Tuple<string, Predicate<Skill>>> ret = new List<Tuple<string, Predicate<Skill>>>
@@ -265,11 +273,11 @@ namespace Chummer.UI.Skills
 				new Tuple<string, IComparer<KnowledgeSkill>>(LanguageManager.Instance.GetString("Skill_SortAttributeValue"),
 					new KnowledgeSkillSorter((x, y) => y.AttributeModifiers.CompareTo(x.AttributeModifiers))),
 				new Tuple<string, IComparer<KnowledgeSkill>>(LanguageManager.Instance.GetString("Skill_SortAttributeName"),
-					new KnowledgeSkillSorter((x, y) => x.Attribute.CompareTo(y.Attribute))),
+					new KnowledgeSkillSorter((x, y) => string.Compare(x.Attribute, y.Attribute, StringComparison.Ordinal))),
 				new Tuple<string, IComparer<KnowledgeSkill>>(LanguageManager.Instance.GetString("Skill_SortCategory"),
-					new KnowledgeSkillSorter((x, y) => x.SkillCategory.CompareTo(y.SkillCategory))),
+					new KnowledgeSkillSorter((x, y) => string.Compare(x.SkillCategory, y.SkillCategory, StringComparison.Ordinal))),
 			};
-			
+
 			return ret;
 		}
 
@@ -320,7 +328,7 @@ namespace Chummer.UI.Skills
 		private void MakeSkillDisplays()
 		{
 			Stopwatch sw = Stopwatch.StartNew();
-			_groups = new BindingListDisplay<SkillGroup>(_character.SkillsSection.SkillGroups, @group => new SkillGroupControl(@group))
+			_groups = new BindingListDisplay<SkillGroup>(_character.SkillsSection.SkillGroups, group => new SkillGroupControl(group))
 			{
 				Location = new Point(0, 15),
 			};
@@ -356,14 +364,14 @@ namespace Chummer.UI.Skills
 		private Control MakeActiveSkill(Skill arg)
 		{
 			SkillControl2 control = new SkillControl2(arg);
-			controls.Add(control);
+			_controls.Add(control);
 			control.CustomAttributeChanged += Control_CustomAttributeChanged;
 			return control;
 		}
 
 		private void Control_CustomAttributeChanged(object sender, EventArgs e)
 		{
-			btnResetCustomDisplayAttribute.Visible = controls.Any(x => x.CustomAttributeSet);
+			btnResetCustomDisplayAttribute.Visible = _controls.Any(x => x.CustomAttributeSet);
 		}
 
 		private void Panel1_Resize(object sender, EventArgs e)
@@ -481,7 +489,7 @@ namespace Chummer.UI.Skills
 
 		private void btnResetCustomDisplayAttribute_Click(object sender, EventArgs e)
 		{
-			foreach (SkillControl2 control2 in controls.Where(x => x.CustomAttributeSet))
+			foreach (SkillControl2 control2 in _controls.Where(x => x.CustomAttributeSet))
 			{
 				control2.ResetSelectAttribute();
 			}
@@ -491,7 +499,7 @@ namespace Chummer.UI.Skills
 		{
 			if (_searchMode)
 			{
-				_skills.Filter(skill => CultureInfo.InvariantCulture.CompareInfo.IndexOf(skill.DisplayName, cboDisplayFilter.Text, CompareOptions.IgnoreCase) >= 0, true);
+				_skills.Filter(skill => GlobalOptions.CultureInfo.CompareInfo.IndexOf(skill.DisplayName, cboDisplayFilter.Text, CompareOptions.IgnoreCase) >= 0, true);
 			}
 		}
 
@@ -526,7 +534,7 @@ namespace Chummer.UI.Skills
 		{
 			if (_searchMode)
 			{
-				_knoSkills.Filter(skill => CultureInfo.InvariantCulture.CompareInfo.IndexOf(skill.WriteableName, cboDisplayFilter.Text, CompareOptions.IgnoreCase) >= 0, true);
+				_knoSkills.Filter(skill => GlobalOptions.CultureInfo.CompareInfo.IndexOf(skill.WriteableName, cboDisplayFilter.Text, CompareOptions.IgnoreCase) >= 0, true);
 			}
 		}
 	}

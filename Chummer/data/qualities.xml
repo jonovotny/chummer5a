@@ -511,9 +511,16 @@
 			<karma>6</karma>
 			<category>Positive</category>
 			<limit>4</limit>
-			<bonus />
+      <bonus>
+        <spellresistance>1</spellresistance>
+      </bonus>
 			<forbidden>
 				<oneof>
+          <metatypecategory>Shapeshifter</metatypecategory>
+          <metatype>Naga</metatype>
+          <metatype>Pixie</metatype>
+          <metatype>Centaur</metatype>
+          <metatype>Sasquatch</metatype>
 					<quality>Adept</quality>
 					<quality>Magician</quality>
 					<quality>Mystic Adept</quality>
@@ -535,9 +542,16 @@
 			<karma>12</karma>
 			<category>Positive</category>
 			<limit>2</limit>
-			<bonus />
+      <bonus>
+        <spellresistance>2</spellresistance>
+      </bonus>
 			<forbidden>
 				<oneof>
+          <metatypecategory>Shapeshifter</metatypecategory>
+          <metatype>Naga</metatype>
+          <metatype>Pixie</metatype>
+          <metatype>Centaur</metatype>
+          <metatype>Sasquatch</metatype>
 					<quality>Adept</quality>
 					<quality>Magician</quality>
 					<quality>Mystic Adept</quality>
@@ -557,9 +571,16 @@
 			<name>Magic Resistance (Rating 3)</name>
 			<karma>18</karma>
 			<category>Positive</category>
-			<bonus />
+      <bonus>
+        <spellresistance>3</spellresistance>
+      </bonus>
 			<forbidden>
 				<oneof>
+          <metatypecategory>Shapeshifter</metatypecategory>
+          <metatype>Naga</metatype>
+          <metatype>Pixie</metatype>
+          <metatype>Centaur</metatype>
+          <metatype>Sasquatch</metatype>
 					<quality>Adept</quality>
 					<quality>Magician</quality>
 					<quality>Mystic Adept</quality>
@@ -579,9 +600,16 @@
 			<name>Magic Resistance (Rating 4)</name>
 			<karma>24</karma>
 			<category>Positive</category>
-			<bonus />
+      <bonus>
+        <spellresistance>4</spellresistance>
+      </bonus>
 			<forbidden>
 				<oneof>
+          <metatypecategory>Shapeshifter</metatypecategory>
+          <metatype>Naga</metatype>
+          <metatype>Pixie</metatype>
+          <metatype>Centaur</metatype>
+          <metatype>Sasquatch</metatype>
 					<quality>Adept</quality>
 					<quality>Magician</quality>
 					<quality>Mystic Adept</quality>
@@ -4972,7 +5000,9 @@
 			<name>Arcane Arrester</name>
 			<karma>10</karma>
 			<category>Positive</category>
-			<bonus />
+      <bonus>
+        <spellresistance>2</spellresistance>
+      </bonus>
 			<required>
 				<oneof>
 					<quality>Changeling (Class I SURGE)</quality>
@@ -4998,7 +5028,9 @@
 			<name>Arcane Arrester II</name>
 			<karma>20</karma>
 			<category>Positive</category>
-			<bonus />
+      <bonus>
+        <spellresistance>4</spellresistance>
+      </bonus>
 			<required>
 				<oneof>
 					<quality>Changeling (Class I SURGE)</quality>
@@ -5837,6 +5869,7 @@
 			</required>
 			<source>RF</source>
 			<page>116</page>
+      <metagenetic>yes</metagenetic>
 		</quality>
 		<quality>
 			<id>556c2599-ae97-44ff-98aa-442af1c9c6d4</id>
@@ -7295,7 +7328,7 @@
 					</replaceattribute>
 					<replaceattribute>
 						<name>CHA</name>
-						<min>1</min>
+						<min>3</min>
 						<max>9</max>
 					</replaceattribute>
 				</replaceattributes>
@@ -9109,7 +9142,7 @@
 						<quality>Mystic Adept</quality>
 					</oneof>
 				</required>
-				<discount>-10</discount>
+				<value>-10</value>
 			</costdiscount>
 			<category>Positive</category>
 			<bonus>
@@ -9268,7 +9301,7 @@
 						<quality>Mystic Adept</quality>
 					</oneof>
 				</required>
-				<discount>-10</discount>
+				<value>-10</value>
 			</costdiscount>
 			<category>Positive</category>
 			<bonus>
@@ -9377,12 +9410,6 @@
 				<allof>
 					<metatype>Human</metatype>
 				</allof>
-				<oneof>
-					<quality>Magician</quality>
-					<quality>Mystic Adept</quality>
-          <quality>Adept</quality>
-          <quality>Aspected Magician</quality>
-				</oneof>
 			</required>
 			<forbidden>
 				<oneof>
@@ -9932,7 +9959,7 @@
 						<quality>Mystic Adept</quality>
 					</oneof>
 				</required>
-				<discount>-10</discount>
+				<value>-10</value>
 			</costdiscount>
 			<bonus>
 				<enableattribute>
@@ -10811,6 +10838,12 @@
 			<category>Positive</category>
 			<bonus>
 				<prototypetranshuman>1</prototypetranshuman>
+        <selectquality>
+          <quality>Wanted</quality>
+          <quality>Allergy (Common, Mild)</quality>
+          <quality>Astral Beacon</quality>
+          <quality>Insomnia (Basic)</quality>
+        </selectquality>
 			</bonus>
 			<source>CF</source>
 			<page>54</page>
@@ -11367,13 +11400,18 @@
 			<category>Positive</category>
 			<limit>no</limit>
 			<bonus>
-				<replaceattribute>
-					<name>MAG</name>
-					<min>1</min>
-					<max>6</max>
-					<aug>6</aug>
-					<val>1</val>
-				</replaceattribute>
+        <replaceattributes>
+          <replaceattribute>
+            <name>MAG</name>
+            <min>1</min>
+            <max>6</max>
+            <aug>6</aug>
+            <val>1</val>
+          </replaceattribute>
+        </replaceattributes>
+        <enableattribute>
+          <name>MAG</name>
+        </enableattribute>
 				<enabletab>
 					<name>critter</name>
 				</enabletab>
@@ -11430,13 +11468,18 @@
 			<category>Positive</category>
 			<limit>no</limit>
 			<bonus>
-        <replaceattribute>
-					<name>MAG</name>
-					<min>1</min>
-					<max>6</max>
-					<aug>6</aug>
-					<val>1</val>
-				</replaceattribute>
+        <replaceattributes>
+          <replaceattribute>
+            <name>MAG</name>
+            <min>1</min>
+            <max>6</max>
+            <aug>6</aug>
+            <val>1</val>
+          </replaceattribute>
+        </replaceattributes>
+        <enableattribute>
+          <name>MAG</name>
+        </enableattribute>
 				<enabletab>
 					<name>critter</name>
 				</enabletab>
@@ -11489,13 +11532,18 @@
 			<category>Positive</category>
 			<limit>no</limit>
 			<bonus>
-        <replaceattribute>
-					<name>MAG</name>
-					<min>1</min>
-					<max>6</max>
-					<aug>6</aug>
-					<val>1</val>
-				</replaceattribute>
+        <replaceattributes>
+          <replaceattribute>
+            <name>MAG</name>
+            <min>1</min>
+            <max>6</max>
+            <aug>6</aug>
+            <val>1</val>
+          </replaceattribute>
+        </replaceattributes>
+        <enableattribute>
+          <name>MAG</name>
+        </enableattribute>
 				<enabletab>
 					<name>critter</name>
 				</enabletab>
@@ -11556,13 +11604,18 @@
 			<category>Positive</category>
 			<limit>no</limit>
 			<bonus>
-        <replaceattribute>
-					<name>MAG</name>
-					<min>1</min>
-					<max>6</max>
-					<aug>6</aug>
-					<val>1</val>
-				</replaceattribute>
+        <replaceattributes>
+          <replaceattribute>
+            <name>MAG</name>
+            <min>1</min>
+            <max>6</max>
+            <aug>6</aug>
+            <val>1</val>
+          </replaceattribute>
+        </replaceattributes>
+        <enableattribute>
+          <name>MAG</name>
+        </enableattribute>
 				<enabletab>
 					<name>critter</name>
 				</enabletab>
